@@ -5,8 +5,7 @@ using StudentLibrary.Domain.Services;
 
 namespace StudentLibrary.App;
 
-/// Консольний застосунок з інтерактивним меню для системи обліку
-/// літератури та читацьких формулярів студентської бібліотеки.
+
 internal static class Program
 {
     private static readonly Library Lib = new("Студентська бібліотека");
@@ -18,7 +17,7 @@ internal static class Program
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.InputEncoding = System.Text.Encoding.UTF8;
 
-        SeedData();
+        SeedData(); // заповнення бібліотеки тестовими даними
 
         var running = true;
         while (running)
@@ -47,13 +46,7 @@ internal static class Program
         Console.WriteLine("До побачення!");
     }
 
-    // ========================================================================
-    //  1. УПРАВЛІННЯ КОРИСТУВАЧАМИ (вимоги 1.1 – 1.5.3)
-    // ========================================================================
-
-    /// <summary>
-    /// Підменю управління користувачами бібліотеки.
-    /// </summary>
+    
     private static void UserMenu()
     {
         var back = false;
@@ -82,19 +75,18 @@ internal static class Program
         }
     }
 
-    /// <summary>
-    /// Додає нового студента (вимога 1.1).
-    /// </summary>
+
+    // Додає нового студента (вимога 1.1).
     private static void AddStudent()
     {
         try
         {
             Console.Write("Ім'я: ");
-            var firstName = Console.ReadLine()!;
+            var firstName = Console.ReadLine() ?? "";
             Console.Write("Прізвище: ");
-            var lastName = Console.ReadLine()!;
+            var lastName = Console.ReadLine() ?? "";
             Console.Write("Академічна група: ");
-            var group = Console.ReadLine()!;
+            var group = Console.ReadLine() ?? "";
 
             var student = new Student(firstName, lastName, group);
             Lib.AddStudent(student);
@@ -102,10 +94,9 @@ internal static class Program
         }
         catch (Exception ex) { PrintError(ex); }
     }
-
-    /// <summary>
-    /// Видаляє студента за номером зі списку (вимога 1.2).
-    /// </summary>
+    
+    
+    // Видаляє студента за номером зі списку (вимога 1.2).
     private static void RemoveStudent()
     {
         try
@@ -119,9 +110,8 @@ internal static class Program
         catch (Exception ex) { PrintError(ex); }
     }
 
-    /// <summary>
-    /// Змінює дані обраного студента з вибором конкретного поля (вимога 1.3).
-    /// </summary>
+
+    // Змінює дані обраного студента з вибором конкретного поля (вимога 1.3).
     private static void UpdateStudentData()
     {
         try
@@ -170,9 +160,8 @@ internal static class Program
         catch (Exception ex) { PrintError(ex); }
     }
 
-    /// <summary>
-    /// Переглядає дані конкретного студента (вимога 1.4).
-    /// </summary>
+
+    // Переглядає дані конкретного студента (вимога 1.4).
     private static void ViewStudent()
     {
         var student = SelectStudent("Оберіть студента для перегляду");
@@ -180,7 +169,7 @@ internal static class Program
 
         Console.WriteLine(student.ToPrintString());
 
-        var docs = Lib.GetDocumentsHeldByStudent(student.Id);
+        var docs = Lib.GetDocumentsHeldByStudent(student.Id); // список документів що на руках
         if (docs.Count > 0)
         {
             Console.WriteLine($"  Документи на руках ({docs.Count}):");
@@ -193,9 +182,8 @@ internal static class Program
         }
     }
 
-    /// <summary>
-    /// Виводить список усіх студентів з вибором сортування (вимоги 1.5, 1.5.1–1.5.3).
-    /// </summary>
+
+    // Виводить список усіх студентів з вибором сортування (вимоги 1.5, 1.5.1–1.5.3).
     private static void ListStudents()
     {
         Console.WriteLine("Сортувати за: 1-Ім'я  2-Прізвище  3-Група");
@@ -204,7 +192,7 @@ internal static class Program
         {
             "1" => StudentSortCriterion.ByFirstName,
             "3" => StudentSortCriterion.ByAcademicGroup,
-            _ => StudentSortCriterion.ByLastName
+            _ => StudentSortCriterion.ByLastName //за замовчуванням
         };
 
         var list = Lib.GetAllStudents(criterion);
@@ -217,13 +205,7 @@ internal static class Program
         PrintNumberedList(list);
     }
 
-    // ========================================================================
-    //  2. УПРАВЛІННЯ ДОКУМЕНТАМИ (вимоги 2.1 – 2.5.2)
-    // ========================================================================
-
-    /// <summary>
-    /// Підменю управління документами бібліотеки.
-    /// </summary>
+    
     private static void DocumentMenu()
     {
         var back = false;
@@ -252,9 +234,8 @@ internal static class Program
         }
     }
 
-    /// <summary>
-    /// Додає новий документ — книгу або журнал (вимога 2.1).
-    /// </summary>
+
+    // Додає новий документ — книгу або журнал (вимога 2.1).
     private static void AddDocument()
     {
         try
@@ -264,27 +245,27 @@ internal static class Program
             var type = Console.ReadLine()?.Trim();
 
             Console.Write("Назва: ");
-            var title = Console.ReadLine()!;
+            var title = Console.ReadLine() ?? "";
             Console.Write("Автор: ");
-            var author = Console.ReadLine()!;
+            var author = Console.ReadLine() ?? "";
             Console.Write("Рік видання: ");
-            var year = int.Parse(Console.ReadLine()!);
+            var year = int.Parse(Console.ReadLine()?? "");
 
             Document document;
             if (type == "2")
             {
                 Console.Write("Том: ");
-                var volume = int.Parse(Console.ReadLine()!);
+                var volume = int.Parse(Console.ReadLine() ?? "");
                 Console.Write("Номер випуску: ");
-                var issue = int.Parse(Console.ReadLine()!);
+                var issue = int.Parse(Console.ReadLine() ?? "");
                 document = new Journal(title, author, year, volume, issue);
             }
             else
             {
                 Console.Write("Кількість сторінок: ");
-                var pages = int.Parse(Console.ReadLine()!);
+                var pages = int.Parse(Console.ReadLine() ?? "");
                 Console.Write("Видавництво: ");
-                var publisher = Console.ReadLine()!;
+                var publisher = Console.ReadLine() ?? "";
                 document = new Book(title, author, year, pages, publisher);
             }
 
@@ -293,10 +274,9 @@ internal static class Program
         }
         catch (Exception ex) { PrintError(ex); }
     }
-
-    /// <summary>
-    /// Видаляє документ (вимога 2.2).
-    /// </summary>
+    
+    
+    // Видаляє документ (вимога 2.2).
     private static void RemoveDocument()
     {
         try
@@ -310,9 +290,8 @@ internal static class Program
         catch (Exception ex) { PrintError(ex); }
     }
 
-    /// <summary>
-    /// Змінює дані документа з вибором конкретного поля (вимога 2.3).
-    /// </summary>
+
+    // Змінює дані документа з вибором конкретного поля (вимога 2.3).
     private static void UpdateDocumentData()
     {
         try
@@ -364,7 +343,7 @@ internal static class Program
                         Console.WriteLine("Рік оновлено.");
                         break;
                     case "4":
-                        if (doc is Book bookToEdit)
+                        if (doc is Book bookToEdit) //перевіряє чи doc є Book і створює змінну bootToEdit
                         {
                             Console.Write("Нове видавництво: ");
                             bookToEdit.UpdatePublisher(Console.ReadLine()!);
@@ -402,10 +381,9 @@ internal static class Program
         }
         catch (Exception ex) { PrintError(ex); }
     }
-
-    /// <summary>
-    /// Переглядає дані конкретного документа (вимога 2.4).
-    /// </summary>
+    
+    
+    // Переглядає дані конкретного документа (вимога 2.4).
     private static void ViewDocument()
     {
         var doc = SelectDocument("Оберіть документ для перегляду");
@@ -413,15 +391,14 @@ internal static class Program
 
         Console.WriteLine(doc.ToPrintString());
 
-        var (isInLibrary, holder) = Lib.GetDocumentStatus(doc.Id);
+        var (isInLibrary, holder) = Lib.GetDocumentStatus(doc.Id); // типу деконструкція кортежу
         Console.WriteLine(isInLibrary
             ? "  Статус: у бібліотеці (доступний)."
             : $"  Статус: видано — {holder!.GetFullName()} (гр. {holder.AcademicGroup})");
     }
 
-    /// <summary>
-    /// Виводить список усіх документів з вибором сортування (вимоги 2.5, 2.5.1, 2.5.2).
-    /// </summary>
+
+    // Виводить список усіх документів з вибором сортування (вимоги 2.5, 2.5.1, 2.5.2).
     private static void ListDocuments()
     {
         Console.WriteLine("Сортувати за: 1-Назвою  2-Автором");
@@ -442,13 +419,7 @@ internal static class Program
         PrintNumberedList(list);
     }
 
-    // ========================================================================
-    //  3. УПРАВЛІННЯ ВИДАЧАМИ (вимоги 3.1 – 3.4)
-    // ========================================================================
-
-    /// <summary>
-    /// Підменю управління видачами документів.
-    /// </summary>
+    
     private static void LoanMenu()
     {
         var back = false;
@@ -476,10 +447,9 @@ internal static class Program
             }
         }
     }
-
-    /// <summary>
-    /// Видає документ студенту (вимога 3.1, обмеження n менше 5).
-    /// </summary>
+    
+    
+    // Видає документ студенту (вимога 3.1).
     private static void IssueDocument()
     {
         try
@@ -495,10 +465,9 @@ internal static class Program
         }
         catch (Exception ex) { PrintError(ex); }
     }
-
-    /// <summary>
-    /// Показує, які документи взяв конкретний студент (вимога 3.2).
-    /// </summary>
+    
+    
+    // Показує, які документи взяв конкретний студент (вимога 3.2).
     private static void ViewStudentDocuments()
     {
         try
@@ -519,9 +488,8 @@ internal static class Program
         catch (Exception ex) { PrintError(ex); }
     }
 
-    /// <summary>
-    /// Визначає, чи документ у бібліотеці, а якщо виданий — кому (вимога 3.3).
-    /// </summary>
+
+    /// Визначає, чи документ у бібліотеці, а якщо виданий то кому (вимога 3.3).
     private static void CheckDocumentStatus()
     {
         try
@@ -541,10 +509,8 @@ internal static class Program
         }
         catch (Exception ex) { PrintError(ex); }
     }
-
-    /// <summary>
+    
     /// Повертає документ до бібліотеки (вимога 3.4).
-    /// </summary>
     private static void ReturnDocument()
     {
         try
@@ -575,10 +541,8 @@ internal static class Program
         }
         catch (Exception ex) { PrintError(ex); }
     }
-
-    /// <summary>
-    /// Виводить список усіх активних видач.
-    /// </summary>
+    
+    
     private static void ListActiveLoans()
     {
         var loans = Lib.GetActiveLoans();
@@ -592,14 +556,7 @@ internal static class Program
         for (var i = 0; i < loans.Count; i++)
             Console.WriteLine($"  {i + 1}. {loans[i].ToPrintString()}");
     }
-
-    // ========================================================================
-    //  4. ПОШУК (вимоги 4.1, 4.2)
-    // ========================================================================
-
-    /// <summary>
-    /// Підменю пошуку.
-    /// </summary>
+    
     private static void SearchMenu()
     {
         var back = false;
@@ -621,10 +578,9 @@ internal static class Program
             }
         }
     }
-
-    /// <summary>
-    /// Шукає документи за ключовим словом (вимога 4.1).
-    /// </summary>
+    
+    
+    // Шукає документи за ключовим словом (вимога 4.1).
     private static void SearchDocuments()
     {
         Console.Write("Введіть ключове слово для пошуку серед документів: ");
@@ -640,10 +596,8 @@ internal static class Program
         Console.WriteLine($"Знайдено документів: {results.Count}");
         PrintNumberedList(results);
     }
-
-    /// <summary>
-    /// Шукає студентів за ключовим словом (вимога 4.2).
-    /// </summary>
+    
+    // Шукає студентів за ключовим словом (вимога 4.2).
     private static void SearchStudents()
     {
         Console.Write("Введіть ключове слово для пошуку серед користувачів: ");
@@ -659,14 +613,8 @@ internal static class Program
         Console.WriteLine($"Знайдено користувачів: {results.Count}");
         PrintNumberedList(results);
     }
-
-    // ========================================================================
-    //  ДОПОМІЖНІ МЕТОДИ
-    // ========================================================================
-
-    /// <summary>
-    /// Заповнює бібліотеку демонстраційними даними.
-    /// </summary>
+    
+    // Заповнює бібліотеку демо даними.
     private static void SeedData()
     {
         var students = new Student[]
@@ -687,17 +635,13 @@ internal static class Program
             new Journal("ACM Computing Surveys", "ACM", 2024, 56, 7)
         };
 
-        foreach (var s in students) Lib.AddStudent(s);
+        foreach (var s in students) Lib.AddStudent(s); // додає тестові дані до бібліотеки
         foreach (var d in documents) Lib.AddDocument(d);
 
         Console.WriteLine($"Бібліотеку ініціалізовано: {students.Length} студентів, {documents.Length} документів.");
     }
-
-    /// <summary>
-    /// Виводить пронумерований список та дозволяє обрати студента за номером.
-    /// </summary>
-    /// <param name="prompt">Текст підказки.</param>
-    /// <returns>Обраний студент або null, якщо скасовано.</returns>
+    
+    // Виводить пронумерований список та дозволяє обрати студента за номером.
     private static Student? SelectStudent(string prompt)
     {
         var list = Lib.GetAllStudents();
@@ -716,12 +660,8 @@ internal static class Program
         if (idx < 0 || idx >= list.Count) return null;
         return list[idx];
     }
-
-    /// <summary>
-    /// Виводить пронумерований список документів та дозволяє обрати один.
-    /// </summary>
-    /// <param name="prompt">Текст підказки.</param>
-    /// <returns>Обраний документ або null, якщо скасовано.</returns>
+    
+    // Виводить пронумерований список документів та дозволяє обрати один.
     private static Document? SelectDocument(string prompt)
     {
         var list = Lib.GetAllDocuments();
@@ -740,28 +680,15 @@ internal static class Program
         if (idx < 0 || idx >= list.Count) return null;
         return list[idx];
     }
-
-    /// <summary>
-    /// Виводить пронумерований список об'єктів, що підтримують IPrintable.
-    /// </summary>
+    
+    // Виводить пронумерований список об'єктів, що підтримують IPrintable.
     private static void PrintNumberedList<T>(IReadOnlyList<T> items) where T : IPrintable
     {
         for (var i = 0; i < items.Count; i++)
             Console.WriteLine($"  {i + 1}. {items[i].ToPrintString()}");
     }
-
-    /// <summary>
-    /// Зчитує рядок; якщо порожній — повертає значення за замовчуванням.
-    /// </summary>
-    private static string ReadOrDefault(string defaultValue)
-    {
-        var input = Console.ReadLine()?.Trim();
-        return string.IsNullOrEmpty(input) ? defaultValue : input;
-    }
-
-    /// <summary>
-    /// Виводить повідомлення помилки.
-    /// </summary>
+    
+    // Виводить повідомлення помилки.
     private static void PrintError(Exception ex)
     {
         Console.WriteLine($"[Помилка] {ex.Message}");
