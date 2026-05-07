@@ -5,13 +5,17 @@ namespace StudentLibrary.Domain.Models;
 
 public abstract class Person : IPrintable, ISearchable
 {
-    // Унікальний ідентифікатор особи. Незмінний після створення (інкапсуляція).
+    /// <summary>
+    /// Унікальний ідентифікатор особи.
+    /// </summary>
     public Guid Id { get; }
-    
+
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
-    
-    // Ініціалізує нову особу із заданими ім'ям та прізвищем.
+
+    /// <summary>
+    /// Ініціалізує нову особу із заданими ім'ям та прізвищем.
+    /// </summary>
     protected Person(string firstName, string lastName)
     {
         ValidateName(firstName, nameof(firstName));
@@ -21,32 +25,39 @@ public abstract class Person : IPrintable, ISearchable
         FirstName = firstName.Trim();
         LastName = lastName.Trim();
     }
-    
-    // Повертає повне ім'я особи
+
+    /// <summary>
+    /// Повертає повне ім'я особи у форматі "Прізвище Ім'я".
+    /// </summary>
     public string GetFullName() => $"{LastName} {FirstName}";
 
-
-    // Оновлює ім'я особи з валідацією вхідних даних.
+    /// <summary>
+    /// Оновлює ім'я особи з валідацією вхідних даних.
+    /// </summary>
     public void UpdateFirstName(string newFirstName)
     {
         ValidateName(newFirstName, nameof(newFirstName));
         FirstName = newFirstName.Trim();
     }
 
-
-    // Оновлює прізвище особи з валідацією вхідних даних.
+    /// <summary>
+    /// Оновлює прізвище особи з валідацією вхідних даних.
+    /// </summary>
     public void UpdateLastName(string newLastName)
     {
         ValidateName(newLastName, nameof(newLastName));
         LastName = newLastName.Trim();
     }
 
-
-    // Абстрактний метод формування рядкового представлення особи.
+    /// <summary>
+    /// Абстрактний метод формування рядкового представлення особи.
+    /// </summary>
     public abstract string ToPrintString();
-    
-    // Перевіряє, чи відповідає особа заданому ключовому слову.
-    // Реалізація може бути доповнена у класах-нащадках.
+
+    /// <summary>
+    /// Перевіряє, чи відповідає особа заданому ключовому слову.
+    /// Реалізація може бути доповнена у класах-нащадках.
+    /// </summary>
     public virtual bool MatchesKeyword(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
@@ -57,8 +68,9 @@ public abstract class Person : IPrintable, ISearchable
             || LastName.Contains(pattern, StringComparison.OrdinalIgnoreCase);
     }
 
-
-    // Метод валідації імені/прізвища.
+    /// <summary>
+    /// Допоміжний метод валідації імені/прізвища.
+    /// </summary>
     private static void ValidateName(string value, string parameterName)
     {
         if (string.IsNullOrWhiteSpace(value))

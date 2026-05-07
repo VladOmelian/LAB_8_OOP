@@ -11,3 +11,4 @@ D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\refint\StudentLibrary.D
 D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.xml
 D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.pdb
 D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\ref\StudentLibrary.Domain.dll
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.sourcelink.json

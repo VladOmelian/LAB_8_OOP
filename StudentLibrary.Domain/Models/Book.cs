@@ -4,12 +4,11 @@ namespace StudentLibrary.Domain.Models;
 public class Book : Document
 {
     public int PageCount { get; private set; }
-    
-    // Видавництво.
     public string Publisher { get; private set; }
 
-
-    // Ініціалізує нову книгу.
+    /// <summary>
+    /// Ініціалізує нову книгу.
+    /// </summary>
     public Book(string title, string author, int year, int pageCount, string publisher)
         : base(title, author, year)
     {
@@ -21,11 +20,15 @@ public class Book : Document
         PageCount = pageCount;
         Publisher = publisher.Trim();
     }
-    
-    // Повертає тип документа.
+
+    /// <summary>
+    /// Повертає тип документа.
+    /// </summary>
     public override string GetDocumentType() => "Книга";
-    
-    
+
+    /// <summary>
+    /// Оновлює кількість сторінок.
+    /// </summary>
     public void UpdatePageCount(int newPageCount)
     {
         if (newPageCount <= 0)
@@ -33,22 +36,27 @@ public class Book : Document
         PageCount = newPageCount;
     }
 
-    
+    /// <summary>
+    /// Оновлює видавництво.
+    /// </summary>
     public void UpdatePublisher(string newPublisher)
     {
         if (string.IsNullOrWhiteSpace(newPublisher))
             throw new ArgumentException("Видавництво не може бути порожнім.", nameof(newPublisher));
         Publisher = newPublisher.Trim();
     }
-    
-    // Викликає батьківську реалізацію (з типом, назвою, автором, роком, ID), а потім дописує специфічні для книги дані.
+
+    /// <summary>
+    /// Розширене рядкове представлення з врахуванням специфічних атрибутів книги.
+    /// </summary>
     public override string ToPrintString()
     {
         return $"{base.ToPrintString()}, видавництво: {Publisher}, сторінок: {PageCount}";
     }
 
-
-    // Розширений пошук, що додатково шукає по назві видавництва.
+    /// <summary>
+    /// Розширений пошук, що додатково шукає по назві видавництва.
+    /// </summary>
     public override bool MatchesKeyword(string keyword)
     {
         if (base.MatchesKeyword(keyword))

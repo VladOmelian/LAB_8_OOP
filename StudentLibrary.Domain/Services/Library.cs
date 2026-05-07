@@ -7,23 +7,36 @@ namespace StudentLibrary.Domain.Services;
 public class Library
 {
     public const int MaxActiveLoansPerStudent = 4;
-    
-    // Колекція зареєстрованих студентів-користувачів бібліотеки (агрегація).
+
+    /// <summary>
+    /// Колекція зареєстрованих студентів-користувачів бібліотеки (агрегація).
+    /// </summary>
     private readonly List<Student> students;
-    
+
+    /// <summary>
+    /// Колекція документів бібліотеки (агрегація).
+    /// </summary>
     private readonly List<Document> documents;
+
+    /// <summary>
+    /// Колекція видач.
+    /// </summary>
     private readonly List<Loan> loans;
-    
-    // Ініціалізує нову бібліотеку.
+
+    /// <summary>
+    /// Ініціалізує нову бібліотеку із заданою назвою.
+    /// </summary>
     public Library(string name)
     {
         students = new List<Student>();
         documents = new List<Document>();
         loans = new List<Loan>();
     }
-    
-    
-    // Додає нового студента до бібліотеки (вимога 1.1).
+
+
+    /// <summary>
+    /// Додає нового студента до бібліотеки (вимога 1.1).
+    /// </summary>
     public void AddStudent(Student student)
     {
         if (student is null)
@@ -34,8 +47,10 @@ public class Library
 
         students.Add(student);
     }
-    
-    // Видаляє студента з бібліотеки за ідентифікатором (вимога 1.2).
+
+    /// <summary>
+    /// Видаляє студента з бібліотеки за ідентифікатором (вимога 1.2).
+    /// </summary>
     public void RemoveStudent(Guid studentId)
     {
         var student = FindStudentOrThrow(studentId);
@@ -45,9 +60,10 @@ public class Library
 
         students.Remove(student);
     }
-    
 
-    // Повертає список всіх студентів бібліотеки з можливістю сортування (вимоги 1.5, 1.5.1 - 1.5.3).
+    /// <summary>
+    /// Повертає список всіх студентів бібліотеки з можливістю сортування (вимоги 1.5, 1.5.1 - 1.5.3).
+    /// </summary>
     public IReadOnlyList<Student> GetAllStudents(StudentSortCriterion sortCriterion = StudentSortCriterion.ByLastName)
     {
         return sortCriterion switch
@@ -55,11 +71,13 @@ public class Library
             StudentSortCriterion.ByFirstName => students.OrderBy(s => s.FirstName).ToList(),
             StudentSortCriterion.ByLastName => students.OrderBy(s => s.LastName).ToList(),
             StudentSortCriterion.ByAcademicGroup => students.OrderBy(s => s.AcademicGroup).ToList(),
-            _ => students.ToList() //типу default, повертає невідсортований список.
+            _ => students.ToList()
         };
     }
-    
-    // Додає новий документ до бібліотеки (вимога 2.1).
+
+    /// <summary>
+    /// Додає новий документ до бібліотеки (вимога 2.1).
+    /// </summary>
     public void AddDocument(Document document)
     {
         if (document is null)
@@ -70,8 +88,10 @@ public class Library
 
         documents.Add(document);
     }
-    
-    // Видаляє документ з бібліотеки (вимога 2.2).
+
+    /// <summary>
+    /// Видаляє документ з бібліотеки (вимога 2.2).
+    /// </summary>
     public void RemoveDocument(Guid documentId)
     {
         var document = FindDocumentOrThrow(documentId);
@@ -81,9 +101,10 @@ public class Library
 
         documents.Remove(document);
     }
-    
 
-    // Повертає список всіх документів з можливістю сортування (вимоги 2.5, 2.5.1, 2.5.2).
+    /// <summary>
+    /// Повертає список всіх документів з можливістю сортування (вимоги 2.5, 2.5.1, 2.5.2).
+    /// </summary>
     public IReadOnlyList<Document> GetAllDocuments(DocumentSortCriterion sortCriterion = DocumentSortCriterion.ByTitle)
     {
         return sortCriterion switch
@@ -94,26 +115,30 @@ public class Library
         };
     }
 
-    
-    // Видає документ студенту (вимога 3.1).
+
+    /// <summary>
+    /// Видає документ студенту (вимога 3.1).
+    /// </summary>
     public Loan IssueDocument(Guid studentId, Guid documentId)
     {
         var student = FindStudentOrThrow(studentId);
         var document = FindDocumentOrThrow(documentId);
 
-        var activeLoansForStudent = loans.Count(l => l.Student.Id == studentId && l.IsActive); //кількість актисних видач, які має студент
+        var activeLoansForStudent = loans.Count(l => l.Student.Id == studentId && l.IsActive);
         if (activeLoansForStudent >= MaxActiveLoansPerStudent)
             throw new LoanLimitExceededException(student.GetFullName(), MaxActiveLoansPerStudent);
 
-        if (loans.Any(l => l.Document.Id == documentId && l.IsActive)) // перевіряє чи документ уже виданий комусь іншому
+        if (loans.Any(l => l.Document.Id == documentId && l.IsActive))
             throw new DocumentNotAvailableException(document.Title);
 
         var loan = new Loan(student, document);
         loans.Add(loan);
         return loan;
     }
-    
-    // Повертає список документів, наразі взятих конкретним студентом (вимога 3.2).
+
+    /// <summary>
+    /// Повертає список документів, наразі взятих конкретним студентом (вимога 3.2).
+    /// </summary>
     public IReadOnlyList<Document> GetDocumentsHeldByStudent(Guid studentId)
     {
         FindStudentOrThrow(studentId);
@@ -123,8 +148,10 @@ public class Library
             .Select(l => l.Document)
             .ToList();
     }
-    
-    // Визначає, чи знаходиться документ у бібліотеці, та хто його взяв, якщо виданий (вимога 3.3).
+
+    /// <summary>
+    /// Визначає, чи знаходиться документ у бібліотеці, та хто його взяв, якщо виданий (вимога 3.3).
+    /// </summary>
     public (bool IsInLibrary, Student? CurrentHolder) GetDocumentStatus(Guid documentId)
     {
         FindDocumentOrThrow(documentId);
@@ -135,8 +162,9 @@ public class Library
             : (false, activeLoan.Student);
     }
 
-
-    // Повертає документ до бібліотеки (вимога 3.4).
+    /// <summary>
+    /// Повертає документ до бібліотеки (вимога 3.4).
+    /// </summary>
     public void ReturnDocument(Guid studentId, Guid documentId)
     {
         var loan = loans.FirstOrDefault(l =>
@@ -145,34 +173,43 @@ public class Library
             && l.IsActive);
 
         if (loan is null)
-            throw new LibraryException("Активна видача для зазначеного студента та документа не знайдена.");
+            throw new LibraryException(
+                "Активна видача для зазначеного студента та документа не знайдена.");
 
         loan.MarkAsReturned();
     }
 
-
-    // Повертає всі активні видачі (для звітності або відображення).
+    /// <summary>
+    /// Повертає всі активні видачі.
+    /// </summary>
     public IReadOnlyList<Loan> GetActiveLoans() =>
         loans.Where(l => l.IsActive).ToList();
-    
-    
-    // Знаходить студента за ID або кидає виняток.
+
+    /// <summary>
+    /// Знаходить студента за ID або кидає виняток.
+    /// </summary>
     private Student FindStudentOrThrow(Guid studentId)
     {
         return students.FirstOrDefault(s => s.Id == studentId)
             ?? throw new EntityNotFoundException("Студент", studentId);
     }
-    
-    // Знаходить документ за ID або кидає виняток.
+
+    /// <summary>
+    /// Знаходить документ за ID або кидає виняток.
+    /// </summary>
     private Document FindDocumentOrThrow(Guid documentId)
     {
         return documents.FirstOrDefault(d => d.Id == documentId)
             ?? throw new EntityNotFoundException("Документ", documentId);
     }
-    
-    // Внутрішній доступ до колекції документів для сервісів-залежностей.
+
+    /// <summary>
+    /// Внутрішній доступ до колекції документів для сервісів-залежностей.
+    /// </summary>
     internal IEnumerable<Document> GetDocumentsForSearch() => documents;
-    
-    // Внутрішній доступ до колекції студентів для сервісів-залежностей.
+
+    /// <summary>
+    /// Внутрішній доступ до колекції студентів для сервісів-залежностей.
+    /// </summary>
     internal IEnumerable<Student> GetStudentsForSearch() => students;
 }

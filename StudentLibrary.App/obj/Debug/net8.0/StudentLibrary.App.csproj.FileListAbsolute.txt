@@ -17,3 +17,4 @@ D:\StudentLibrary\StudentLibrary.App\obj\Debug\net8.0\refint\StudentLibrary.App.
 D:\StudentLibrary\StudentLibrary.App\obj\Debug\net8.0\StudentLibrary.App.pdb
 D:\StudentLibrary\StudentLibrary.App\obj\Debug\net8.0\StudentLibrary.App.genruntimeconfig.cache
 D:\StudentLibrary\StudentLibrary.App\obj\Debug\net8.0\ref\StudentLibrary.App.dll
+D:\StudentLibrary\StudentLibrary.App\obj\Debug\net8.0\StudentLibrary.App.sourcelink.json

@@ -3,13 +3,19 @@ namespace StudentLibrary.Domain.Models;
 
 public class Journal : Document
 {
-    // Номер випуску журналу.
+    /// <summary>
+    /// Номер випуску журналу.
+    /// </summary>
     public int IssueNumber { get; private set; }
-    
-    // Том (volume) журналу.
+
+    /// <summary>
+    /// Том (volume) журналу.
+    /// </summary>
     public int Volume { get; private set; }
-    
-    // Ініціалізує новий журнал.
+
+    /// <summary>
+    /// Ініціалізує новий журнал.
+    /// </summary>
     public Journal(string title, string author, int year, int volume, int issueNumber)
         : base(title, author, year)
     {
@@ -21,10 +27,13 @@ public class Journal : Document
         Volume = volume;
         IssueNumber = issueNumber;
     }
-    
+
+
     public override string GetDocumentType() => "Журнал";
 
-    
+    /// <summary>
+    /// Оновлює том журналу.
+    /// </summary>
     public void UpdateVolume(int newVolume)
     {
         if (newVolume <= 0)
@@ -32,7 +41,9 @@ public class Journal : Document
         Volume = newVolume;
     }
 
-    
+    /// <summary>
+    /// Оновлює номер випуску журналу.
+    /// </summary>
     public void UpdateIssueNumber(int newIssueNumber)
     {
         if (newIssueNumber <= 0)
@@ -40,8 +51,9 @@ public class Journal : Document
         IssueNumber = newIssueNumber;
     }
 
-
-    // Розширене рядкове представлення з врахуванням специфічних атрибутів журналу.
+    /// <summary>
+    /// Розширене рядкове представлення з врахуванням специфічних атрибутів журналу.
+    /// </summary>
     public override string ToPrintString()
     {
         return $"{base.ToPrintString()}, том {Volume}, випуск №{IssueNumber}";

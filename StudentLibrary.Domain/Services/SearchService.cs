@@ -6,21 +6,25 @@ namespace StudentLibrary.Domain.Services;
 
 public class SearchService
 {
-    // Шукає документи в бібліотеці за ключовим словом (вимога 4.1).
+    /// <summary>
+    /// Шукає документи в бібліотеці за ключовим словом (вимога 4.1).
+    /// </summary>
     public IReadOnlyList<Document> SearchDocuments(Library library, string keyword)
     {
         if (library is null)
             throw new ArgumentNullException(nameof(library));
 
         if (string.IsNullOrWhiteSpace(keyword))
-            return Array.Empty<Document>(); //повертає порожній масив (не створює новий об'єкт при кожному виклику).
+            return Array.Empty<Document>();
 
         return library.GetDocumentsForSearch()
-            .Where(d => ((ISearchable)d).MatchesKeyword(keyword)) //фільтрує документи
+            .Where(d => ((ISearchable)d).MatchesKeyword(keyword))
             .ToList();
     }
-    
-    // Шукає студентів у бібліотеці за ключовим словом (вимога 4.2).
+
+    /// <summary>
+    /// Шукає студентів у бібліотеці за ключовим словом (вимога 4.2).
+    /// </summary>
     public IReadOnlyList<Student> SearchStudents(Library library, string keyword)
     {
         if (library is null)
