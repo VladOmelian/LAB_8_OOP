@@ -1,0 +1,13 @@
+D:\StudentLibrary\StudentLibrary.Domain\bin\Debug\net8.0\StudentLibrary.Domain.deps.json
+D:\StudentLibrary\StudentLibrary.Domain\bin\Debug\net8.0\StudentLibrary.Domain.dll
+D:\StudentLibrary\StudentLibrary.Domain\bin\Debug\net8.0\StudentLibrary.Domain.pdb
+D:\StudentLibrary\StudentLibrary.Domain\bin\Debug\net8.0\StudentLibrary.Domain.xml
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.AssemblyInfoInputs.cache
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.AssemblyInfo.cs
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.csproj.CoreCompileInputs.cache
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.dll
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\refint\StudentLibrary.Domain.dll
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.xml
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\StudentLibrary.Domain.pdb
+D:\StudentLibrary\StudentLibrary.Domain\obj\Debug\net8.0\ref\StudentLibrary.Domain.dll
